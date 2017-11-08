@@ -303,6 +303,20 @@ console.log( 'The unique customers are:', uniqueCustomers );
 */
 var bigSpenders;
 
+// iterate through transactions, filter for type: 'sale'
+// then filter for items.length >= 5
+// iterate through this new array of transactions, and create new array
+// of objects with name and numItems attributes
+
+var bigSpenders = transactions.filter(function(transaction) {
+  return transaction.type === 'sale' && transaction.items.length >= 5;
+}).map(function(transaction) {
+  return {
+    name: transaction.customer,
+    numItems: transaction.items.length
+  }
+});
+
 console.log( 'The "big spenders" are:', bigSpenders );
 
 
@@ -316,6 +330,10 @@ console.log( 'The "big spenders" are:', bigSpenders );
   - Transactions don't have 'prices', but their 'items' do!
 */
 var sumSales;
+
+var sumSales = transactions[0].items.reduce(function(total, item) {
+  return total + item.price;
+},0);
 
 console.log( 'The sum of all sales is:', sumSales );
 
@@ -333,7 +351,22 @@ console.log( 'The sum of all sales is:', sumSales );
 
 var sumPurchases;
 
-console.log( 'The sum of all purhcases is:', sumPurchases );
+// iterate through transactions, filter for type: 'purchase'
+// iterate through filtered transactions array and transform to array of items
+// iterate through array of arrays of items, flatten it
+// iterate through final array to sum up prices
+
+var sumPurchases = transactions.filter(function(transaction) {
+  return transaction.type === 'purchase';
+}).map(function(transaction) {
+  return transaction.items;
+}).reduce(function(newArray, arrayOfItems) {
+  return newArray.concat(arrayOfItems);
+}, []).reduce(function(total, item) {
+  return total + item.price;
+}, 0);
+
+console.log( 'The sum of all purchases is:', sumPurchases );
 
 
 // --------------------------------------------------
