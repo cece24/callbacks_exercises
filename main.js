@@ -129,7 +129,16 @@ console.log( 'The total number of transactions is:', totalTransactions );
   HINT(S):
   - Not all transactions are 'sales'.
 */
-var numSales;
+var numSales = 0;
+
+// iterate through transactions
+// if the type is 'sale', add 1 to numSales
+
+transactions.forEach(function(transaction) {
+  if (transaction.type === 'sale') {
+    numSales++;
+  }
+});
 
 /*
   Hey, welcome to the first question!
@@ -159,7 +168,13 @@ console.log( 'The total number of sales is:', numSales );
 /*
   Calculate the total number of 'purchases'.
 */
-var numPurchases;
+var numPurchases = 0;
+
+transactions.forEach(function(transaction) {
+  if (transaction.type === 'purchase') {
+    numPurchases++;
+  }
+});
 
 console.log( 'The total number of purchases is:', numPurchases );
 
@@ -173,7 +188,13 @@ console.log( 'The total number of purchases is:', numPurchases );
   HINT(S):
   - Don't forget that 'purchases' can also be made in 'cash'!
 */
-var numCashSales;
+var numCashSales = 0;
+
+transactions.forEach(function(transaction) {
+  if (transaction.type === 'sale' && transaction.paymentMethod === 'cash') {
+    numCashSales++;
+  }
+});
 
 console.log( 'The total number of cash sales is:', numCashSales );
 
@@ -187,7 +208,12 @@ console.log( 'The total number of cash sales is:', numCashSales );
   HINT(S):
   - Make sure to exclude any 'sales' made by 'credit'!
 */
-var numCreditPurchases;
+
+var creditPurchases = transactions.filter(function(transaction) {
+  return transaction.type === 'purchase' && transaction.paymentMethod === 'credit';
+});
+
+var numCreditPurchases = creditPurchases.length;
 
 console.log( 'The total number of credit purchases is:', numCreditPurchases );
 
@@ -204,9 +230,26 @@ console.log( 'The total number of credit purchases is:', numCreditPurchases );
   - The assembled array should be made up of strings, not full `transaction` objects.
   - This array is allowed to contain duplicate values.
 */
-var uniqueVendors;
+var uniqueVendors = [];
+
+// iterate to find which transactions have a vendor
+// create a new array of the vendor strings from transactions
+
+transactions.forEach(function(transaction) {
+  if (transaction.vendor) {
+    uniqueVendors.push(transaction.vendor)
+  }
+});
 
 console.log( 'The unique vendors are:', uniqueVendors );
+
+var uniqueVendors2 = transactions.reduce(function(new_array, transaction) {
+  return [...new_array, transaction.vendor];
+}, []).filter(function(vendor) {
+  return vendor;
+});
+
+console.log( 'Using reduce, the unique vendors are:', uniqueVendors2 );
 
 
 // --------------------------------------------------
@@ -221,7 +264,26 @@ console.log( 'The unique vendors are:', uniqueVendors );
   - The assembled array should be made up of strings, not full `transaction` objects.
   - Make sure that the resulting array *does not* include any duplicates.
 */
-var uniqueCustomers;
+
+// Solution 1
+var uniqueCustomers = transactions.map(function(transaction) {
+  return transaction.customer
+}).filter(function(customer) {
+  return customer;
+}).filter(function(customer, index, originalArray) {
+  return originalArray.indexOf(customer) === index;
+});
+
+// Solution 2
+// var uniqueCustomers = transactions.filter(function(transaction) {
+//   if (transaction.customer) {
+//     return transaction;
+//   }
+// }).map(function(transaction) {
+//   return transaction.customer;
+// }).filter(function(customer, index, originalArray) {
+//   return originalArray.indexOf(customer) === index;
+// });
 
 console.log( 'The unique customers are:', uniqueCustomers );
 
