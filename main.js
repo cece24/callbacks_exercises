@@ -479,6 +479,4 @@ sumOfSmallestPurchase = purchaseTransactions[0].reduce(function(sum, item) {
   return sum + item.price;
 }, 0);
 
-// sumOfSmallestPurchase =
-
 console.log( 'The sum of the smallest purchase is:', sumOfSmallestPurchase );
