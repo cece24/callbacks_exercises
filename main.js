@@ -384,6 +384,32 @@ console.log( 'The sum of all purchases is:', sumPurchases );
 */
 var netProfit;
 
+// iterate through transactions, make new array of items
+// from every transaction
+// flatten array
+// iterate through flattened array to sum up prices
+
+var netProfit = transactions.map(function(transaction) {
+  return transaction.items
+}).reduce(function(newArray, arrayOfItems) {
+  return newArray.concat(arrayOfItems);
+}, []).reduce(function(netProfit, item) {
+  return netProfit + item.price;
+}, 0);
+
+// Solution 2 using forEach to create a flattened array
+// var netProfit = [];
+//
+// transactions.map(function(transaction) {
+//   return transaction.items;
+// }).forEach(function(arrayOfItems) {
+//   netProfit = netProfit.concat(arrayOfItems);
+// })
+//
+// var netProfit = netProfit.reduce(function(netAmount, item) {
+//   return netAmount + item.price;
+// }, 0);
+
 console.log( 'The net profit is:', netProfit );
 
 
@@ -398,6 +424,34 @@ console.log( 'The net profit is:', netProfit );
 */
 var mostItems;
 
+// Solution 1
+
+// iterate through transactions, sort by length of items array length
+// into a new array
+// return first value
+
+// var mostItemsArray = transactions.sort(function(transaction1, transaction2) {
+//   console.log('transaction 1: ' + transaction1);
+//   console.log('transaction 2: ' + transaction2);
+//   console.log('2 minus 1: ' + (transaction2.items.length - transaction1.items.length));
+//   return transaction2.items.length - transaction1.items.length;
+// });
+//
+// mostItems = mostItemsArray[0].items.length
+
+// Solution 2
+
+// iterate through transactions
+// if length of items array is > than the current mostItems value
+// length of items array becomes the new value of mostItems
+
+mostItems = 0;
+transactions.forEach(function(transaction) {
+  if (transaction.items.length > mostItems) {
+    mostItems = transaction.items.length;
+  }
+});
+
 console.log( 'The most items sold in a single transaction is:', mostItems );
 
 
@@ -408,5 +462,23 @@ console.log( 'The most items sold in a single transaction is:', mostItems );
   Calculate the sum of the 'purchase' with the fewest items.
 */
 var sumOfSmallestPurchase;
+
+// iterate through transactions, create new array of 'purchase' transactions
+// sort new array from fewest items to most items
+// calculate sum of the first array element's prices
+
+var purchaseTransactions = transactions.map(function(transaction) {
+  if (transaction.type === 'purchase') {
+    return transaction.items;
+  }
+}).sort(function(items1, items2) {
+  return items1.length - items2.length;
+});
+
+sumOfSmallestPurchase = purchaseTransactions[0].reduce(function(sum, item) {
+  return sum + item.price;
+}, 0);
+
+// sumOfSmallestPurchase =
 
 console.log( 'The sum of the smallest purchase is:', sumOfSmallestPurchase );
